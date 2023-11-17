@@ -1,0 +1,26 @@
+%{
+#include<stdio.h>
+int c = 0;
+%}
+
+%%
+\/\/[^\n]*     { c++; };                // Match and ignore single-line comments
+\/\*([^*]|(\*+[^*\/]))*\*+\/  { c++; }; // Match and ignore multi-line comments
+.              ; 
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+int main()
+{
+    yyin = fopen("26.c", "r");
+    yyout = fopen("26empty.c", "w");
+    yylex();
+    printf("%d\n",c);
+    fclose(yyin);
+    fclose(yyout);
+    return 0;
+}
