@@ -1,0 +1,48 @@
+%{
+#include <stdio.h>
+%}
+
+DIGIT [0-9]
+
+%%
+
+{DIGIT}{DIGIT} {
+    int num1 = yytext[0] - '0';
+    int num2 = yytext[1] - '0';
+    printf("Enter operation (a for addition, s for subtraction, m for multiplication, d for division): ");
+    int operation = getchar();
+    getchar();  // Consume the newline character
+    switch (operation) {
+        case 'a':
+            printf("Sum: %d\n", num1 + num2);
+            break;
+        case 's':
+            printf("Difference: %d\n", num1 - num2);
+            break;
+        case 'm':
+            printf("Product: %d\n", num1 * num2);
+            break;
+        case 'd':
+            if (num2 != 0) {
+                printf("Quotient: %d\n", num1 / num2);
+            } else {
+                printf("Error: Division by zero\n");
+            }
+            break;
+        default:
+            printf("Invalid operation\n");
+    }
+    return 0;
+}
+
+.   { printf("Invalid input: %s\n", yytext); }
+
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
+int yywrap(){
+return 1;
+}
